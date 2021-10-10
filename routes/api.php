@@ -22,6 +22,30 @@ Route::prefix('auth')->group(function() {
     Route::post('/reset_password/{token}', 'App\Http\Controllers\AuthController@confirmation_token');
 });
 
+Route::prefix('users')->group(function() {
+    Route::get('/show_all', 'App\Http\Controllers\UserController@index');
+    Route::get('/show/{id}', 'App\Http\Controllers\UserController@show');
+    Route::delete('/delete/{id}', 'App\Http\Controllers\UserController@destroy');
+    Route::patch('/update/{id}', 'App\Http\Controllers\UserController@update');
+});
+
+Route::prefix('calendars')->group(function() {
+    Route::get('/show_all', 'App\Http\Controllers\CalendarsController@index');
+    Route::get('/show/{id}', 'App\Http\Controllers\CalendarsController@show');
+    Route::post('/create', 'App\Http\Controllers\CalendarsController@store');
+    Route::delete('/delete/{id}', 'App\Http\Controllers\CalendarsController@destroy');
+    Route::patch('/update/{id}', 'App\Http\Controllers\CalendarsController@update');
+});
+
+Route::prefix('events')->group(function() {
+    Route::get('/show_all', 'App\Http\Controllers\EventsController@index');
+    Route::get('/show/{id}', 'App\Http\Controllers\EventsController@show');
+    Route::get('/show/calendar/{id}', 'App\Http\Controllers\EventsController@showByCalendar');
+    Route::post('/create/{id}', 'App\Http\Controllers\EventsController@store');
+    Route::delete('/delete/{calendar_id}/{event_id}', 'App\Http\Controllers\EventsController@destroy');
+    Route::patch('/update/{calendar_id}/{event_id}', 'App\Http\Controllers\EventsController@update');
+});
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
