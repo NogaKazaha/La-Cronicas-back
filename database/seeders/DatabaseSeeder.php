@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             'username' => "NogaKazaha",
             'email' => "nogakazahawork@gmail.com",
             'password' => Hash::make('qweasdzxc'),
+            'shareId' => 'NogaKazaha',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
@@ -42,6 +43,11 @@ class DatabaseSeeder extends Seeder
             'date' => '2001-08-13',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+        DB::table('calendars_users_ids')->insert([
+            'calendar_id' => 1,
+            'user_id' => 1,
+            'owner' => true
         ]);
     }
 }

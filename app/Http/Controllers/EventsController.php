@@ -37,20 +37,33 @@ class EventsController extends Controller
             $description = $request->input('description');
             $category = $request->input('category');
             $date = $request->input('date');
+            $status = false;
+            $calendars_ids = DB::table('calendars_users_ids')->where('user_id', $user->id)->pluck('calendar_id');
+            foreach($calendars_ids as $calendar) {
+                if($calendar == $id) {
+                    $status = true;
+                }
+            }
             $creditianals = [
-                'calendar_id' => $id,
+                'calendar_id' => (int)$id,
                 'user_id' => $user->id,
                 'title' => $title,
                 'description' => $description,
                 'category' => $category,
                 'date' => $date
             ];
-            $create_event = Event::create($creditianals);
-            return response([
-                'message' => 'Event created',
-                'Event' => $create_event
-            ]);
-
+            if($status == true) {
+                $create_event = Event::create($creditianals);
+                return response([
+                    'message' => 'Event created',
+                    'Event' => $create_event
+                ]);
+            }
+            else {
+                return response([
+                    'message' => 'Event cannot be created by this user'
+                ]);
+            }
         }
     }
 

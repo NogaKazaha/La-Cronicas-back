@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -65,5 +66,15 @@ class UserController extends Controller
                 'message' => 'You have no rights to delete users'
             ]);
         }
+    }
+
+    public function showUserCalendars($id) {
+        $calendars_ids = DB::table('calendars_users_ids')->where('user_id', $id)->pluck('calendar_id');
+        $all_calendars = [];
+        foreach($calendars_ids as $id) {
+            $calendar = DB::table('calendars')->where('id', $id)->get();
+            array_push($all_calendars, $calendar[0]);
+        }
+        return $all_calendars;
     }
 }

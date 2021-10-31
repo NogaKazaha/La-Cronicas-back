@@ -27,6 +27,7 @@ Route::prefix('users')->group(function() {
     Route::get('/show/{id}', 'App\Http\Controllers\UserController@show');
     Route::delete('/delete/{id}', 'App\Http\Controllers\UserController@destroy');
     Route::patch('/update/{id}', 'App\Http\Controllers\UserController@update');
+    Route::get('/show_all/{id}', 'App\Http\Controllers\UserController@showUserCalendars');  
 });
 
 Route::prefix('calendars')->group(function() {
@@ -35,6 +36,7 @@ Route::prefix('calendars')->group(function() {
     Route::post('/create', 'App\Http\Controllers\CalendarsController@store');
     Route::delete('/delete/{id}', 'App\Http\Controllers\CalendarsController@destroy');
     Route::patch('/update/{id}', 'App\Http\Controllers\CalendarsController@update');
+    Route::post('/share/{calendar_id}/{shareId}', 'App\Http\Controllers\CalendarsController@share');
 });
 
 Route::prefix('events')->group(function() {

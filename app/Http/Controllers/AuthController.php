@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Calendars;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -16,10 +17,30 @@ use Carbon\Carbon;
 class AuthController extends Controller
 {
     public function register(Request $request) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < 10; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
         $create_user = User::create([
             'username' => $request->input('username'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
+            'shareId' => $randomString
+        ]);
+        $creditianals = [
+            'user_id' => $create_user->id,
+            'title' => 'Default calendar',
+            'status' => 'unremovable',
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ];
+        $addDefCalendar = Calendars::create($creditianals);
+        DB::table('calendars_users_ids')->insert([
+            'calendar_id' => $addDefCalendar->id,
+            'user_id' => $create_user->id,
+            'owner' => true
         ]);
         return response([
             'message' => 'Succesfuly registered',
