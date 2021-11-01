@@ -78,18 +78,43 @@ class EventsController extends Controller
         $user_id = $user->id;
         $event_creator_id = DB::table('events')->where('id', $event_id)->value('user_id');
         $calendar_creator_id = DB::table('calendars')->where('id', $calendar_id)->value('user_id');
-        if($user_id != $event_creator_id && $user_id != $calendar_creator_id) {
-            return response([
-                'message' => 'You can not update this calendar'
-            ]);
+        $status= DB::table('calendars')->where('id', $calendar_id)->value('status');
+        if($status == 'unremovable') {
+            if($user_id != $event_creator_id && $user_id != $calendar_creator_id) {
+                return response([
+                    'message' => 'You can not update this calendar'
+                ]);
+            }
+            else {
+                $event = Event::find($event_id);
+                $event->update($request->all());
+                return response([
+                    'message' => 'Event update',
+                    'Event' => $event
+                ]);
+            }
         }
         else {
-            $event = Event::find($event_id);
-            $event->update($request->all());
-            return response([
-                'message' => 'Event update',
-                'Event' => $event
-            ]);
+            $change = false;
+            $users = DB::table('calendars_users_ids')->where('calendar_id', $calendar_id)->pluck('user_id');
+            foreach($users as $user_ids) {
+                if($user_ids == $user_id) {
+                    $change = true;
+                }
+            }
+            if($change == true) {
+                $event = Event::find($event_id);
+                $event->update($request->all());
+                return response([
+                    'message' => 'Event update',
+                    'Event' => $event
+                ]);
+            }
+            else {
+                return response([
+                    'message' => 'You can not update this calendar'
+                ]);
+            }
         }
     }
 
@@ -104,16 +129,41 @@ class EventsController extends Controller
         $user_id = $user->id;
         $event_creator_id = DB::table('events')->where('id', $event_id)->value('user_id');
         $calendar_creator_id = DB::table('calendars')->where('id', $calendar_id)->value('user_id');
-        if($user_id != $event_creator_id && $user_id != $calendar_creator_id) {
-            return response([
-                'message' => 'You can not update this calendar'
-            ]);
+        $status= DB::table('calendars')->where('id', $calendar_id)->value('status');
+        if($status == 'unremovable') {
+            if($user_id != $event_creator_id && $user_id != $calendar_creator_id) {
+                return response([
+                    'message' => 'You can not update this calendar'
+                ]);
+            }
+            else {
+                Event::destroy($event_id);
+                return response([
+                    'message' => 'Event deleted'
+                ]);
+            }
         }
         else {
-            Event::destroy($event_id);
-            return response([
-                'message' => 'Event deleted'
-            ]);
+            $change = false;
+            $users = DB::table('calendars_users_ids')->where('calendar_id', $calendar_id)->pluck('user_id');
+            foreach($users as $user_ids) {
+                if($user_ids == $user_id) {
+                    $change = true;
+                }
+            }
+            if($change == true) {
+                $event = Event::find($event_id);
+                $event->update($request->all());
+                return response([
+                    'message' => 'Event update',
+                    'Event' => $event
+                ]);
+            }
+            else {
+                return response([
+                    'message' => 'You can not delete this calendar'
+                ]);
+            }
         }
     }
 }
