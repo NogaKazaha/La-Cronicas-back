@@ -152,16 +152,14 @@ class EventsController extends Controller
                 }
             }
             if($change == true) {
-                $event = Event::find($event_id);
-                $event->update($request->all());
+                Event::destroy($event_id);
                 return response([
-                    'message' => 'Event update',
-                    'Event' => $event
+                    'message' => 'Event deleted'
                 ]);
             }
             else {
                 return response([
-                    'message' => 'You can not delete this calendar'
+                    'message' => 'You can not delete this event'
                 ]);
             }
         }
