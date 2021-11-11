@@ -104,12 +104,12 @@ class AuthController extends Controller
                 'title' => 'Password Reset Mail for API',
                 'body' => 'Your link to reset password: http://127.0.0.1:8000/api/auth/reset_password/'.$new_token
             ];
-            // $details_react = [
-            //     'title' => 'Password Reset Mail for React App',
-            //     'body' => 'Your link to reset password: http://localhost:3000/password_reset/'.$new_token
-            // ];
+            $details_react = [
+                'title' => 'Password Reset Mail for React App',
+                'body' => 'Your link to reset password: http://localhost:3000/reset_pass/'.$new_token
+            ];
             Mail::to($reset_password_data)->send(new PasswordResetMail($details_api));
-            // Mail::to($reset_password_data)->send(new PasswordResetMail($details_react));
+            Mail::to($reset_password_data)->send(new PasswordResetMail($details_react));
             return response([
                 'message' => 'Your password reset link was sent',
                 'reset_token' => $new_token
