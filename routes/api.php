@@ -34,7 +34,7 @@ Route::prefix('calendars')->group(function() {
     Route::get('/show_all', 'App\Http\Controllers\CalendarsController@index');
     Route::get('/show/{id}', 'App\Http\Controllers\CalendarsController@show');
     Route::post('/create', 'App\Http\Controllers\CalendarsController@store');
-    Route::delete('/delete/{id}', 'App\Http\Controllers\CalendarsController@destroy');
+    Route::post('/delete/{id}', 'App\Http\Controllers\CalendarsController@destroy');
     Route::patch('/update/{id}', 'App\Http\Controllers\CalendarsController@update');
     Route::post('/share/{calendar_id}/{shareId}', 'App\Http\Controllers\CalendarsController@share');
 });

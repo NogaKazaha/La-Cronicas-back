@@ -14,8 +14,8 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     public function checkLogIn(Request $request)
     {
-        $token = explode(" ", $request->header("Authorization"))[1];
-        // $token = $request->header("Authorization");
+        // $token = explode(" ", $request->header("Authorization"))[1];
+        $token = $request->header("Authorization");
         $token = trim($token, '\"');
         $user = DB::table('users')->where("remember_token", $token);
         if($user) {
