@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Event;
 use App\Models\Calendars;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -33,8 +34,8 @@ class AuthController extends Controller
             'user_id' => $create_user->id,
             'title' => 'Default calendar',
             'status' => 'unremovable',
-            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            'created_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s')
         ];
         $addDefCalendar = Calendars::create($creditianals);
         DB::table('calendars_users_ids')->insert([
@@ -42,9 +43,31 @@ class AuthController extends Controller
             'user_id' => $create_user->id,
             'owner' => true
         ]);
+        $key = '19268055-e430-4fe9-9594-3aa7d963929b';
+        $holiday_api = new \HolidayAPI\Client(['key' => $key]);
+        $holidays = $holiday_api->holidays([
+            'country' => 'UA',
+            'year' => date("Y") - 1,
+        ]);
+        $holidays = $holidays['holidays'];
+        $counter = 0;
+        foreach ($holidays as $holiday => $value) {
+            Event::create([
+                'calendar_id' => $addDefCalendar->id,
+                'user_id' => $create_user->id,
+                'title' => $value['name'],
+                'description' => $value['name'],
+                'category' => 'reminder',
+                'date' => Carbon::createFromFormat('Y-m-d', $value['date'])->setTime(12, 0)->addYear(),
+                'created_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s')
+            ]);
+            $counter++;
+        }
         return response([
             'message' => 'Succesfuly registered',
-            'user' => $create_user
+            'user' => $create_user,
+            'events' => 'Created ' . $counter . ' event(s)'
         ]);
     }
 
@@ -64,7 +87,7 @@ class AuthController extends Controller
             return response([
                 'message' => 'Succesfuly loged in',
                 'token' => $token,
-                'user_id' => $user_id
+                'user_id' => $user_id,
             ]);
         }
     }

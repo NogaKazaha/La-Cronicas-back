@@ -90,6 +90,7 @@ class CalendarsController extends Controller
         }
         else {
             Calendars::destroy($id);
+            DB::table('calendars_users_ids')->where('calendar_id', $id)->delete();
             return response([
                 'message' => 'Calendars deleted'
             ]);
@@ -107,6 +108,9 @@ class CalendarsController extends Controller
         $user_id = $user->id;
         $status = DB::table('calendars_users_ids')->where('calendar_id', $calendar_id)->where('user_id', $user_id)->value('owner');
         $status1 =  DB::table('calendars')->where('id', $calendar_id)->value('status');
+        DB::table('calendars')->where('id', $calendar_id)->update([
+            'shared' => true
+        ]);
         if($status == true && $status1 != 'unremovable') {
             $add_user = DB::table('users')->where('shareId', $shareId)->value('id');
             if(!$add_user) {

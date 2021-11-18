@@ -27,7 +27,8 @@ Route::prefix('users')->group(function() {
     Route::get('/show/{id}', 'App\Http\Controllers\UserController@show');
     Route::delete('/delete/{id}', 'App\Http\Controllers\UserController@destroy');
     Route::patch('/update/{id}', 'App\Http\Controllers\UserController@update');
-    Route::get('/show_all/{id}', 'App\Http\Controllers\UserController@showUserCalendars');  
+    Route::get('/show_all/{id}', 'App\Http\Controllers\UserController@showUserCalendars'); 
+    Route::get('/show_all/shared/{id}', 'App\Http\Controllers\UserController@showUserOnlyShared'); 
 });
 
 Route::prefix('calendars')->group(function() {

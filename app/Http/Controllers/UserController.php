@@ -72,8 +72,25 @@ class UserController extends Controller
         $calendars_ids = DB::table('calendars_users_ids')->where('user_id', $id)->pluck('calendar_id');
         $all_calendars = [];
         foreach($calendars_ids as $id) {
+            if(DB::table('calendars_users_ids')->where('user_id', $id)->value('owner') == true) {
+                $calendar = DB::table('calendars')->where('id', $id)->get();
+                array_push($all_calendars, $calendar[0]);
+            }
+            else {
+                continue;
+            }
+        }
+        return $all_calendars;
+    }
+
+    public function showUserOnlyShared($id) {
+        $calendars_ids = DB::table('calendars_users_ids')->where('user_id', $id)->pluck('calendar_id');
+        $all_calendars = [];
+        foreach($calendars_ids as $id) {
             $calendar = DB::table('calendars')->where('id', $id)->get();
-            array_push($all_calendars, $calendar[0]);
+            if(DB::table('calendars')->where('id', $id)->value('shared') == true) {
+                array_push($all_calendars, $calendar[0]);
+            }
         }
         return $all_calendars;
     }

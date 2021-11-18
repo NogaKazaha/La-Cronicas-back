@@ -18,6 +18,7 @@ class CreateCalendarsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('title', 256);
             $table->enum('status', ['removable', 'unremovable'])->default('removable');
+            $table->boolean('shared')->default(false);
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

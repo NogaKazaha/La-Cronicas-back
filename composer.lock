@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e957be7ecabdf84be814217b6fb5cff",
+    "content-hash": "34fda403a79d9ecdeb324749229c0f2e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -957,6 +957,59 @@
                 }
             ],
             "time": "2021-10-06T17:43:30+00:00"
+        },
+        {
+            "name": "holidayapi/holidayapi-php",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/holidayapi/holidayapi-php.git",
+                "reference": "95bba752652cd112649aa2403c21ea0c032a66bc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/holidayapi/holidayapi-php/zipball/95bba752652cd112649aa2403c21ea0c032a66bc",
+                "reference": "95bba752652cd112649aa2403c21ea0c032a66bc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.36 || ^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "HolidayAPI\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Josh Sherman",
+                    "email": "hello@holidayapi.com",
+                    "homepage": "https://holidayapi.com"
+                }
+            ],
+            "description": "Official PHP library for Holiday API",
+            "homepage": "https://github.com/holidayapi/holidayapi-php",
+            "keywords": [
+                "calendar",
+                "holiday",
+                "holidayapi",
+                "holidays"
+            ],
+            "support": {
+                "issues": "https://github.com/holidayapi/holidayapi-php/issues",
+                "source": "https://github.com/holidayapi/holidayapi-php/tree/v2.4.0"
+            },
+            "time": "2021-06-14T23:01:47+00:00"
         },
         {
             "name": "laravel/framework",
