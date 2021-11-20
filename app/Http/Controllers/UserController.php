@@ -71,13 +71,11 @@ class UserController extends Controller
     public function showUserCalendars($id) {
         $calendars_ids = DB::table('calendars_users_ids')->where('user_id', $id)->pluck('calendar_id');
         $all_calendars = [];
-        foreach($calendars_ids as $id) {
-            if(DB::table('calendars_users_ids')->where('user_id', $id)->value('owner') == true) {
-                $calendar = DB::table('calendars')->where('id', $id)->get();
+        foreach($calendars_ids as $ids) {
+            $owner = DB::table('calendars_users_ids')->where('calendar_id', $ids)->where('user_id', $id)->value('owner');
+            if($owner != false) {
+                $calendar = DB::table('calendars')->where('id', $ids)->get();
                 array_push($all_calendars, $calendar[0]);
-            }
-            else {
-                continue;
             }
         }
         return $all_calendars;

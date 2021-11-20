@@ -67,57 +67,6 @@ class EventsController extends Controller
         }
     }
 
-    public function update(Request $request, $calendar_id, $event_id) {
-        $user = $this->checkLogIn($request);
-        if(!$user) {
-            return response([
-                'message' => 'User is not logged in'
-            ]);
-        }
-        $user = JWTAuth::toUser(JWTAuth::getToken());
-        $user_id = $user->id;
-        $event_creator_id = DB::table('events')->where('id', $event_id)->value('user_id');
-        $calendar_creator_id = DB::table('calendars')->where('id', $calendar_id)->value('user_id');
-        $status= DB::table('calendars')->where('id', $calendar_id)->value('status');
-        if($status == 'unremovable') {
-            if($user_id != $event_creator_id && $user_id != $calendar_creator_id) {
-                return response([
-                    'message' => 'You can not update this calendar'
-                ]);
-            }
-            else {
-                $event = Event::find($event_id);
-                $event->update($request->all());
-                return response([
-                    'message' => 'Event update',
-                    'Event' => $event
-                ]);
-            }
-        }
-        else {
-            $change = false;
-            $users = DB::table('calendars_users_ids')->where('calendar_id', $calendar_id)->pluck('user_id');
-            foreach($users as $user_ids) {
-                if($user_ids == $user_id) {
-                    $change = true;
-                }
-            }
-            if($change == true) {
-                $event = Event::find($event_id);
-                $event->update($request->all());
-                return response([
-                    'message' => 'Event update',
-                    'Event' => $event
-                ]);
-            }
-            else {
-                return response([
-                    'message' => 'You can not update this calendar'
-                ]);
-            }
-        }
-    }
-
     public function destroy(Request $request, $calendar_id, $event_id) {
         $user = $this->checkLogIn($request);
         if(!$user) {
@@ -164,4 +113,71 @@ class EventsController extends Controller
             }
         }
     }
+
+    public function findEventsByDate($id, Request $request) {
+        $allEvents = DB::table('events')->where('calendar_id', $id)->get();
+        $eventsOnDate = [];
+        $requestedDate = $request->input('date');
+        $requestedDate = str_replace('\'', '', $requestedDate);
+        foreach($allEvents as $event) {
+            $date = $event->date;
+            $searchDate = explode(" ", $date)[0];
+            if($requestedDate == $searchDate) {
+                array_push($eventsOnDate, $event);
+            }
+        } 
+        return $eventsOnDate;
+    }
+    public function updateById(Request $request, $event_id) {
+        $user = $this->checkLogIn($request);
+        if(!$user) {
+            return response([
+                'message' => 'User is not logged in'
+            ]);
+        }
+        $user = JWTAuth::toUser(JWTAuth::getToken());
+        $user_id = $user->id;
+        $event_creator_id = DB::table('events')->where('id', $event_id)->value('user_id');
+        $calendar_id = DB::table('events')->where('id', $event_id)->value('calendar_id');
+        $calendar_creator_id = DB::table('calendars')->where('id', $calendar_id)->value('user_id');
+        $status= DB::table('calendars')->where('id', $calendar_id)->value('status');
+        if($status == 'unremovable') {
+            if($user_id != $event_creator_id && $user_id != $calendar_creator_id) {
+                return response([
+                    'message' => 'You can not update this calendar'
+                ]);
+            }
+            else {
+                $event = Event::find($event_id);
+                $event->update($request->all());
+                return response([
+                    'message' => 'Event update',
+                    'Event' => $event
+                ]);
+            }
+        }
+        else {
+            $change = false;
+            $users = DB::table('calendars_users_ids')->where('calendar_id', $calendar_id)->pluck('user_id');
+            foreach($users as $user_ids) {
+                if($user_ids == $user_id) {
+                    $change = true;
+                }
+            }
+            if($change == true) {
+                $event = Event::find($event_id);
+                $event->update($request->all());
+                return response([
+                    'message' => 'Event update',
+                    'Event' => $event
+                ]);
+            }
+            else {
+                return response([
+                    'message' => 'You can not update this calendar'
+                ]);
+            }
+        }
+    }
 }
+

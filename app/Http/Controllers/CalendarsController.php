@@ -91,6 +91,7 @@ class CalendarsController extends Controller
         else {
             Calendars::destroy($id);
             DB::table('calendars_users_ids')->where('calendar_id', $id)->delete();
+            DB::table('events')->where('calendar_id', $id)->delete();
             return response([
                 'message' => 'Calendars deleted'
             ]);

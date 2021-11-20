@@ -46,7 +46,8 @@ Route::prefix('events')->group(function() {
     Route::get('/show/calendar/{id}', 'App\Http\Controllers\EventsController@showByCalendar');
     Route::post('/create/{id}', 'App\Http\Controllers\EventsController@store');
     Route::delete('/delete/{calendar_id}/{event_id}', 'App\Http\Controllers\EventsController@destroy');
-    Route::patch('/update/{calendar_id}/{event_id}', 'App\Http\Controllers\EventsController@update');
+    Route::patch('/update/{event_id}', 'App\Http\Controllers\EventsController@updateById');
+    Route::post('/show/date/{id}', 'App\Http\Controllers\EventsController@findEventsByDate');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

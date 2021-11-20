@@ -22,16 +22,16 @@ class DatabaseSeeder extends Seeder
             'email' => "nogakazahawork@gmail.com",
             'password' => Hash::make('qweasdzxc'),
             'shareId' => 'NogaKazaha',
-            'created_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s')
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
 
         DB::table('calendars')->insert([
             'user_id' => 1,
             'title' => 'Default calendar',
             'status' => 'unremovable',
-            'created_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s')
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
 
         DB::table('events')->insert([
@@ -41,8 +41,8 @@ class DatabaseSeeder extends Seeder
             'description' => 'This is My birthday',
             'category' => 'reminder',
             'date' => '2001-08-13',
-            'created_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s'),
-            'updated_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s')
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
         DB::table('calendars_users_ids')->insert([
             'calendar_id' => 1,
@@ -64,8 +64,8 @@ class DatabaseSeeder extends Seeder
                 'description' => $value['name'],
                 'category' => 'reminder',
                 'date' => Carbon::createFromFormat('Y-m-d', $value['date'])->setTime(12, 0)->addYear(),
-                'created_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s')
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ]);
         }
     }

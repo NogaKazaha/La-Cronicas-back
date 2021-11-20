@@ -28,7 +28,9 @@ class AuthController extends Controller
             'username' => $request->input('username'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'shareId' => $randomString
+            'shareId' => $randomString,
+            'created_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->addHours(2)->format('Y-m-d H:i:s')
         ]);
         $creditianals = [
             'user_id' => $create_user->id,
